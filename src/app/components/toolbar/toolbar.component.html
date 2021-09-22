@@ -1,0 +1,5 @@
+<mat-toolbar color="accent">
+  <span class="spacer"></span>
+  <button mat-button *ngIf="!isAuth" (click)="login()"> LOGIN</button>
+  <button mat-button *ngIf="isAuth" (click)="logout()"> LOGOUT</button>
+</mat-toolbar>

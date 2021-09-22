@@ -1,0 +1,51 @@
+<mat-card>
+  <ng-container>
+    <button mat-button (click)="openDialog('Add')" color="primary">
+      <label> ADD TASK</label>
+    </button>
+  </ng-container>
+  <ng-container>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataTableSource" matSort (matSortChange)="pageChanged($event)">
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name</th>
+          <td mat-cell *matCellDef="let row"> {{row.username}} </td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email</th>
+          <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+        </ng-container>
+        <ng-container matColumnDef="text">
+          <th mat-header-cell *matHeaderCellDef> Task</th>
+          <td mat-cell *matCellDef="let row"> {{row.text}}
+            <mat-icon *ngIf="isAuth" (click)="openDialog('Edit', row)">mode_edit_outline</mat-icon>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-form-field *ngIf="isAuth" floatLabel="never">
+              <mat-label>Select an option</mat-label>
+              <mat-select [value]="checkStatus(row.status)" (selectionChange)="changeTaskStatus($event, row)">
+                <mat-option *ngFor="let status of selectedTaskStatus"
+                            value="{{status.name}}">{{status.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <label *ngIf="!isAuth">{{checkStatus(row.status) === 'notDone' ? 'Not Done' : 'Done' }}</label><br>
+            <label *ngIf="row.isEdited"> Task was edited by admin </label>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No tasks found</td>
+        </tr>
+      </table>
+      <mat-paginator [pageSize]="3"
+                     [length]="totalTaskCount"
+                     (page)="pageChanged($event)">
+      </mat-paginator>
+    </div>
+  </ng-container>
+</mat-card>
