@@ -84,6 +84,8 @@ export class AddEditTaskComponent implements OnInit {
           this.dialogRef.close(true);
         }
       });
+    } else {
+      this.dialogRef.close()
     }
   }
 
